@@ -18,8 +18,7 @@ User.prototype.ask = function(message, callback) {
 };
 
 User.prototype.askIfIs = function(question, callback) {
-  var message = "Are you " + question;
-  console.log(message, User.bot);
+  var message = User.bot.getText("are_you") + " " + question;
   var _this = this;
 
   this.tmpAnswer = "";
@@ -27,9 +26,10 @@ User.prototype.askIfIs = function(question, callback) {
   this.answerCallback = callback;
 
   this.answerTimer = setTimeout(function() {
-    User.bot.postMessageToUser(_this.name, "Sorry... maybe I'll ask you later.", User.botParams);
-    callback("Did not answer... sorry.");
-    isAnswering = false;
+    _this.isAnswering = false;
+
+    User.bot.postMessageToUser(_this.name, User.bot.getText("ask_you_later"), User.botParams);
+    callback(User.bot.getText("did_not_answer"));
   }, 60 * 1000);
 
   this.ask(message, function(answer) {
@@ -48,8 +48,8 @@ User.prototype.gotMessage = function(message, channel) {
     clearTimeout(this.answerTimer);
 
     this.answerTimer = setTimeout(function() {
-      User.bot.postMessageToUser(_this.name, "Thanks!", User.botParams);
-      _this.answerCallback(_this.name + " said: \n" + _this.tmpAnswer);
+      User.bot.postMessageToUser(_this.name, User.bot.getText("thanks"), User.botParams);
+      _this.answerCallback(_this.name + " " + User.bot.getText("said") + ": \n" + _this.tmpAnswer);
       isAnswering = false;
     }, 6 * 1000);
   }

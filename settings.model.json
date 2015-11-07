@@ -1,0 +1,43 @@
+{
+  "token": "",
+  "name": "gigi",
+  "icon_emoji": ":cat:",
+  "giphy": null,
+
+  "question_prefix": "is",
+
+  "messages": {
+    "giphy_hello": [ "hi", "hello", "ciao", "salut", "good evening" ],
+
+    "user_not_found": [
+      "I don't know who that is...",
+      "I never heard about that human",
+      "Is it a real person?"],
+
+    "let_me_check": [
+      "let me check...",
+      "I'll ask"],
+
+    "ask_you_later": ["Sorry... maybe I'll ask you later."],
+
+    "did_not_answer": ["Did not answer... sorry."],
+
+    "thanks": ["thanks", "thank you!"],
+
+    "said": ["said"],
+
+    "are_you": ["are you"],
+
+    "hello": [
+      "Hello, I'm Gigi!",
+      "Hi, I'm Gigi!"],
+
+    "presentation": [
+      "Just write `is @user message` eg. `is @jon_doe ok with eating pizza?` and I will ask for you"
+    ],
+
+    "git": [
+      "You can find me here: https://github.com/gedaiu/gigi-slackbot"
+    ]
+  }
+}

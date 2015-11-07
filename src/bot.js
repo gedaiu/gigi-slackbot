@@ -5,12 +5,29 @@ var Giphy = require('./giphy');
 
 var bot = null;
 var params = {};
+var messages = {};
 
 var Bot = {};
 
+Bot.getText = function(message) {
+  if(messages[message] && messages[message].length) {
+    var len = messages[message].length;
+    var pos = Math.floor((Math.random() * len));
+
+    return messages[message][pos];
+  }
+
+  return message;
+};
+
 Bot.init = function(settings) {
+  var _this = this;
+
   User.bot = this;
   Giphy.bot = this;
+
+  messages = settings.messages;
+  this.questionPrefix = settings.question_prefix;
 
   // create a bot
   bot = new SlackBot({
@@ -36,40 +53,45 @@ Bot.init = function(settings) {
       }
     });
 
-    Giphy.send('general', 'hello');
+    Giphy.send('general', Bot.getText("giphy_hello"));
   });
 
   bot.on('message', function(data) {
     data.name = User.getName(data.user);
+    data.channelName = Channel.getName(data.channel);
 
     if(data.type === 'message' && data.name != settings.name) {
       if(matchIsSometing(data.text)) {
 
-        bot.postMessage(data.channel, "Let me check...", params);
+        bot.postMessage(data.channel, Bot.getText("let_me_check"), params);
         var result = parseQuestion(data.text);
           result.user.askIfIs(result.question, function(response) {
           bot.postMessage(data.channel, response, params);
         });
-
       } else if(matchIsSometingInvalidUser(data.text)) {
         bot.postMessage(data.channel, settings.messages.user_not_found, params);
       } else {
         var user = User.get(data.user);
-        if(user) {
+
+        if(user && user.isAnswering) {
           user.gotMessage(data.text, data.channel);
+        } else if (!data.channelName) {
+          bot.postMessage(data.channel, Bot.getText("hello"), params);
+          bot.postMessage(data.channel, Bot.getText("presentation"), params);
+          bot.postMessage(data.channel, Bot.getText("git"), params);
         }
       }
     }
   });
 
   function matchIsSometing(text) {
-    var patt = /is <@[a-z0-9]+> .*/i;
+    var patt = new RegExp(_this.questionPrefix + " <@[a-z0-9]+> .*","i");
+
     return patt.test(text);
   }
 
   function matchIsSometingInvalidUser(text) {
-    var patt = /is @[a-z0-9]+ .*/i;
-
+    var patt = new RegExp(_this.questionPrefix + " <@[a-z0-9]+> .*","i");
     return patt.test(text);
   }
 
