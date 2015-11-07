@@ -76,9 +76,9 @@ Bot.init = function(settings) {
         if(user && user.isAnswering) {
           user.gotMessage(data.text, data.channel);
         } else if (!data.channelName) {
-          bot.postMessage(data.channel, Bot.getText("hello"), params);
-          bot.postMessage(data.channel, Bot.getText("presentation"), params);
-          bot.postMessage(data.channel, Bot.getText("git"), params);
+          bot.postMessage(data.channel, Bot.getText("hello") + "\n" +
+            Bot.getText("presentation") + "\n" +
+            Bot.getText("git"), params);
         }
       }
     }
