@@ -50,7 +50,7 @@ User.prototype.gotMessage = function(message, channel) {
     this.answerTimer = setTimeout(function() {
       User.bot.postMessageToUser(_this.name, User.bot.getText("thanks"), User.botParams);
       _this.answerCallback(_this.name + " " + User.bot.getText("said") + ": \n" + _this.tmpAnswer);
-      isAnswering = false;
+      _this.isAnswering = false;
     }, 6 * 1000);
   }
 };
